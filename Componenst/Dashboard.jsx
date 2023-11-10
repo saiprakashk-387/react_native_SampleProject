@@ -1,36 +1,41 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, ImageBackground, StyleSheet, Text, View} from 'react-native';
 
 const Dashboard = ({route, navigation}) => {
   console.log('route.params', route.params);
   const {params, userInfo} = route.params;
   console.log('nested paramsuserInfo', userInfo);
   console.log('params', params);
+  const image = require('../assests/bg_android.png');
+
   return (
-    <View style={{flex: 1, backgroundColor: 'red'}}>
-      <View style={{flex: 0.3, backgroundColor: 'white'}} />
-
-      <View
-        style={{
-          flex: 0.3,
-          backgroundColor: 'white',
-          // flexDirection: 'row',
-          padding: 10,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text>{`Hi User Logged in Successful \n Your Email Id: ${params?.email} \n Your Mobile Number:${params?.phoneNumber}\n Your id :${params?.password}`}</Text>
+    <View style={styles.container}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <Text
+          style={
+            styles.text
+          }>{`Hi User Logged in Successful \n Your Email Id: ${params?.email} \n Your Mobile Number:${params?.phoneNumber}\n Your id :${params?.password}`}</Text>
         <Button onPress={() => navigation.navigate('login')} title="Go Back" />
-      </View>
-
-      <View style={{flex: 0.4, backgroundColor: 'white'}} />
+        <Button
+          onPress={() => navigation.navigate('htm-odf')}
+          title="Go Next"
+        />
+      </ImageBackground>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  screen: {
+  container: {
     flex: 1,
-    backgroundColor: 'pink',
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  text: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 export default Dashboard;

@@ -1,6 +1,7 @@
 import React, {useState, useRef} from 'react';
 import {
   Alert,
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -88,6 +89,7 @@ const Signup = ({navigation}) => {
       console.error('Error storing form values:', error);
     }
   };
+  const image1 = require('../assests/splashbg.png');
   return (
     <View
       style={{
@@ -96,11 +98,10 @@ const Signup = ({navigation}) => {
         padding: 30,
       }}>
       {/* <ScrollView> */}
-      <View style={{flex: 0.1, backgroundColor: 'white'}}></View>
 
       <View
         style={{
-          flex: 0.8,
+          flex: 0.9,
           backgroundColor: 'white',
         }}>
         <Text
@@ -110,7 +111,7 @@ const Signup = ({navigation}) => {
             padding: 10,
             fontSize: 20,
           }}>
-          Create Account
+          Create Account <Image style={styles.tinyLogo} source={image1} />
         </Text>
         <SafeAreaView style={styles.container}>
           <Text style={{color: 'black'}}>Name</Text>
@@ -232,6 +233,10 @@ const styles = StyleSheet.create({
   submitText: {
     color: '#fff',
     textAlign: 'center',
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
   },
 });
 

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   Switch,
+  Image,
 } from 'react-native';
 import PhoneInput from 'react-native-phone-number-input';
 
@@ -53,24 +54,31 @@ const Login = ({navigation}) => {
   };
 
   const handleFormSubmit = () => {
-    const {email, password, phoneNumber} = inputValues;
-    if (validateForm()) {
-      // Handle the form submission here
-      navigation.navigate('dash', {
-        params: {password, phoneNumber, email},
-      });
-      setInputValues({
-        password: '',
-        phoneNumber: '',
-        email: '',
-      });
-      console.log('login Form submitted:', email, password);
-    }
+    const password = '15874655';
+    const phoneNumber = '852478524';
+    const email = 'sai@yopmai,com';
+    navigation.navigate('dash', {
+      params: {password, phoneNumber, email},
+    });
+    // const {email, password, phoneNumber} = inputValues;
+    // if (validateForm()) {
+    //   // Handle the form submission here
+    //   navigation.navigate('dash', {
+    //     params: {password, phoneNumber, email},
+    //   });
+    //   setInputValues({
+    //     password: '',
+    //     phoneNumber: '',
+    //     email: '',
+    //   });
+    //   console.log('login Form submitted:', email, password);
+    // }
   };
   const handleCheckBoxToggle = () => {
     setIsChecked(!isChecked);
   };
 
+  const image1 = require('../assests/splashbg.png');
   return (
     <View
       style={{
@@ -79,7 +87,6 @@ const Login = ({navigation}) => {
         padding: 30,
       }}>
       {/* <ScrollView> */}
-      <View style={{flex: 0.1, backgroundColor: 'white'}}></View>
 
       <View
         style={{
@@ -93,8 +100,9 @@ const Login = ({navigation}) => {
             padding: 10,
             fontSize: 20,
           }}>
-          Sign In
+          Sign In <Image style={styles.tinyLogo} source={image1} />
         </Text>
+
         <SafeAreaView style={styles.container}>
           {/* <Text style={{color: 'black'}}>Mobile Number</Text>
           <TextInput
@@ -206,10 +214,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   boxShadow: {
-    backgroundColor: 'white', // Background color of the view
-    width: 200, // Set your desired width
-    height: 200, // Set your desired height
-    borderRadius: 10, // Optional: To add rounded corners
+    backgroundColor: 'white',
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
   },
 });
 
