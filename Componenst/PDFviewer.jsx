@@ -2,7 +2,7 @@ import React from 'react';
 import Pdf from 'react-native-pdf';
 
 const PDFViewerComponent = ({route}) => {
-  const {pdfUri} = route.params;
+  const {pdfUri} = route.params ? route.params : 'null';
   const source = {uri: pdfUri && pdfUri, cache: true};
   return (
     <Pdf

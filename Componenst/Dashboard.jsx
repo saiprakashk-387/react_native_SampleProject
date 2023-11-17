@@ -3,7 +3,7 @@ import {Button, ImageBackground, StyleSheet, Text, View} from 'react-native';
 
 const Dashboard = ({route, navigation}) => {
   console.log('route.params', route.params);
-  const {params, userInfo} = route.params;
+  const {params, userInfo} = route?.params ? route?.params : 'null';
   console.log('nested paramsuserInfo', userInfo);
   console.log('params', params);
   const image = require('../assests/bg_android.png');

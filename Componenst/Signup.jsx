@@ -91,13 +91,18 @@ const Signup = ({navigation}) => {
   };
   const image1 = require('../assests/splashbg.png');
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
         backgroundColor: 'white',
         padding: 30,
       }}>
-      {/* <ScrollView> */}
+      {/* <View
+    //   style={{
+    //     flex: 1,
+    //     backgroundColor: 'white',
+    //     padding: 30,
+    //   }}> */}
 
       <View
         style={{
@@ -200,9 +205,8 @@ const Signup = ({navigation}) => {
           </Text>
         </SafeAreaView>
       </View>
-
-      {/* </ScrollView> */}
-    </View>
+      {/* </View> */}
+    </ScrollView>
   );
 };
 

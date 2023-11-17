@@ -1,58 +1,4 @@
-import React, {useState} from 'react';
-import {View, Button, PermissionsAndroid, StyleSheet} from 'react-native';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import RNFS from 'react-native-fs';
-import CompanyLogo from '../assests/Logo.png';
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: '#f7f7f7',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 48,
-    paddingVertical: 16,
-  },
-});
-
-const HTMLToPDFConverter = ({navigation}) => {
-  const [first, setfirst] = useState();
-
-  const userInfo = {
-    name: 'Sai Prakash',
-    age: '25',
-    height: '125',
-    weight: '52',
-  };
-  // const data={
-  const name = '',
-    age = 0,
-    gender = '',
-    height = 0,
-    weight = 0,
-    result = {
-      timestamp: new Date(),
-      bp_sys: 0,
-      bp_dia: 0,
-      resp_rate: 0,
-      oxy_sat_prcnt: 0,
-      heart_rate: 0,
-      bmi: 0,
-      sdnn: 0,
-      rmssd: 0,
-      pNN50_per: 0,
-      cardiac_out: 0.0,
-      map: 0,
-      heart_utilized: 0,
-      HRMax: 0,
-      HRR: 0,
-      THRR: 0,
-      vo2max: 0.0,
-    };
-  const logo = CompanyLogo;
-  const convertToPDF = async () => {
-    const htmlContent = `
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -144,7 +90,7 @@ const HTMLToPDFConverter = ({navigation}) => {
                             <div class="row">
                                 <div>
                                     <p class="largeText" style="text-transform: capitalize;">
-                                        ${name}
+                                        ${fname} ${lname}
                                     </p>
                                     <p class="normalText" style="font-weight: 400;">
                                         <span style="font-weight: 600;">Gender: </span>
@@ -166,25 +112,11 @@ const HTMLToPDFConverter = ({navigation}) => {
                                 <div>
                                     <p class="normalText" style="font-weight: 400;">
                                         <span style="font-weight: 600;">Assessment Date: </span>
-                                        <span>${result.timestamp.toLocaleDateString(
-                                          undefined,
-                                          {
-                                            day: 'numeric',
-                                            month: 'long',
-                                            year: 'numeric',
-                                          },
-                                        )}</span>
+                                        <span>${dateToday}</span>
                                     </p>
                                     <p class="normalText" style="font-weight: 400;">
                                         <span style="font-weight: 600;">Assessment Time: </span>
-                                        <span>${result.timestamp.toLocaleTimeString(
-                                          undefined,
-                                          {
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                            hour12: true,
-                                          },
-                                        )}</span>
+                                        <span>${timeToday}</span>
                                     </p>
                                 </div>
                             </div>
@@ -204,12 +136,8 @@ const HTMLToPDFConverter = ({navigation}) => {
                                     <p class="smallText" style="margin-top: 10px;">
                                         ${result.bp_sys}/${result.bp_dia} mmHg
                                     </p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.resp_rate
-                                    }/min</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.oxy_sat_prcnt
-                                    }%</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.resp_rate}/min</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.oxy_sat_prcnt}%</p>
                                 </div>
                                 <div style="width: 30%;">
                                     <p class="normalText">Range</p>
@@ -225,9 +153,7 @@ const HTMLToPDFConverter = ({navigation}) => {
                                 </div>
                                 <div style="width: 30%;">
                                     <p class="normalText">Value</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.heart_rate
-                                    } bpm</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.heart_rate} bpm</p>
                                 </div>
                                 <div style="width: 30%;">
                                     <p class="normalText">Range</p>
@@ -245,9 +171,7 @@ const HTMLToPDFConverter = ({navigation}) => {
                                 <div
                                     style="width: 30%; display: flex; flex-direction: column; justify-content: space-between;">
                                     <p class="normalText">Value</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.bmi
-                                    } kg/m²</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.bmi} kg/m²</p>
                                 </div>
                                 <div
                                     style="width: 30%; display: flex; flex-direction: column; justify-content: space-between;">
@@ -284,37 +208,17 @@ const HTMLToPDFConverter = ({navigation}) => {
                                 </div>
                                 <div style="width: 30%;">
                                     <p class="normalText">Value</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.sdnn
-                                    } msec</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.rmssd
-                                    } msec</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.pNN50_per
-                                    }%</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.cardiac_out
-                                    } L/min</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.map
-                                    } mmHg</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.heart_utilized
-                                    }%<br />&nbsp;
+                                    <p class="smallText" style="margin-top: 10px;">${result.sdnn} msec</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.rmssd} msec</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.pNN50_per}%</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.cardiac_out} L/min</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.map} mmHg</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.heart_utilized}%<br />&nbsp;
                                     </p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.HRMax
-                                    } bpm</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.HRR
-                                    } bpm</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.THRR
-                                    } bpm</p>
-                                    <p class="smallText" style="margin-top: 10px;">${
-                                      result.vo2max
-                                    } mL/kg/min</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.HRMax} bpm</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.HRR} bpm</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.THRR} bpm</p>
+                                    <p class="smallText" style="margin-top: 10px;">${result.vo2max} mL/kg/min</p>
                                 </div>
                                 <div style="width: 30%;">
                                     <p class="normalText">Range</p>
@@ -423,22 +327,20 @@ const HTMLToPDFConverter = ({navigation}) => {
                             <div style="margin-bottom: 20px;">
                                 <p class="largeText" style="font-weight: 600; margin-bottom: 6px;">Heart Rate Max</p>
                                 <p class="normalText" style="font-weight: 300; text-align: justify;">
-                                 The highest number of beats the heart can pump per minute is the maximum heart rate.
-                                 </p>
-                          </div>
-                           
+                                    The highest number of beats the heart can pump per minute is the maximum heart rate.
+                                </p>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <p class="largeText" style="font-weight: 600; margin-bottom: 6px;">
+                                    Total Body Fat Percentage
+                                </p>
+                                <p class="normalText" style="font-weight: 300; text-align: justify;">
+                                    Body fat percentage is basically the proportion of the mass of fat in our body
+                                    relative to the total mass of our body.
+                                </p>
+                            </div>
                         </section>
                         <section>
-                           
-                            <div style="margin-bottom: 20px;">
-                               <p class="largeText" style="font-weight: 600; margin-bottom: 6px;">
-                              Total Body Fat Percentage
-                               </p>
-                              <p class="normalText" style="font-weight: 300; text-align: justify;">
-                                Body fat percentage is basically the proportion of the mass of fat in our body
-                               relative to the total mass of our body.
-                              </p>
-                            </div>
                             <div style="margin-bottom: 20px;">
                                 <p class="largeText" style="font-weight: 600; margin-bottom: 6px;">SDNN</p>
                                 <p class="normalText" style="font-weight: 300; text-align: justify;">
@@ -526,56 +428,3 @@ const HTMLToPDFConverter = ({navigation}) => {
 </body>
 
 </html>
-  `;
-
-    let Name = 'CareplixScanReport';
-    const options = {
-      html: htmlContent,
-      fileName: Name, // Specify the file name without the file extension
-      directory: 'documents', // Choose the target directory (e.g., 'Documents', 'Download', etc.)
-      height: 297, // A4 height in points
-      width: 210, // A4 width in points
-    };
-    try {
-      const pdf = await RNHTMLtoPDF.convert(options);
-      const path = RNFS.DownloadDirectoryPath + '/' + `${Name}.pdf`; ///custom directory path
-      setfirst(`file://${path}`);
-      ///to get permission from android to save file in device
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Storage Permission',
-          message: 'App needs access to your storage to save the file.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        // Continue with the copy/move operation of file
-        await RNFS.moveFile(pdf.filePath, path); ///MOVE FILE TO DESIRED LOCATION
-        // await RNFS.copyFile(pdf.filePath, path);   ////COPY FILE TO DESIRED LOCATION
-      } else {
-        console.error('Storage permission denied');
-      }
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-    }
-  };
-
-  const ViewPDF = () => {
-    navigation.navigate('pdfviewer', {pdfUri: first});
-  };
-  return (
-    <View>
-      {!first && <Button title="Convert to PDF" onPress={convertToPDF} />}
-      {first && (
-        <>
-          <Button title="view to PDF" onPress={ViewPDF} />
-        </>
-      )}
-    </View>
-  );
-};
-
-export default HTMLToPDFConverter;

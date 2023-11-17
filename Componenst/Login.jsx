@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
   View,
   Switch,
   Image,
@@ -57,7 +58,7 @@ const Login = ({navigation}) => {
     const password = '15874655';
     const phoneNumber = '852478524';
     const email = 'sai@yopmai,com';
-    navigation.navigate('dash', {
+    navigation.navigate('home', {
       params: {password, phoneNumber, email},
     });
     // const {email, password, phoneNumber} = inputValues;
@@ -80,29 +81,34 @@ const Login = ({navigation}) => {
 
   const image1 = require('../assests/splashbg.png');
   return (
-    <View
+    <ScrollView ///page scroll when keyboard opens
       style={{
         flex: 1,
         backgroundColor: 'white',
         padding: 30,
       }}>
-      {/* <ScrollView> */}
-
+      {/* // <View style={{  ///normal page without scroll
+        flex: 1,
+        backgroundColor: 'white',
+        padding: 30,
+      }}>*/}
       <View
         style={{
           flex: 0.8,
           backgroundColor: 'white',
         }}>
-        <Text
-          style={{
-            color: 'black',
-            fontWeight: 'bold',
-            padding: 10,
-            fontSize: 20,
-          }}>
-          Sign In <Image style={styles.tinyLogo} source={image1} />
-        </Text>
-
+        <View>
+          <Image style={styles.tinyLogo} source={image1} />
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: 'bold',
+              padding: 10,
+              fontSize: 20,
+            }}>
+            Sign In
+          </Text>
+        </View>
         <SafeAreaView style={styles.container}>
           {/* <Text style={{color: 'black'}}>Mobile Number</Text>
           <TextInput
@@ -179,9 +185,8 @@ const Login = ({navigation}) => {
           </Text>
         </SafeAreaView>
       </View>
-
-      {/* </ScrollView> */}
-    </View>
+      {/* </View> */}
+    </ScrollView>
   );
 };
 
@@ -220,8 +225,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   tinyLogo: {
+    padding: 10,
     width: 50,
     height: 50,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
