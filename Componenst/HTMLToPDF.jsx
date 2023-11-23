@@ -1,30 +1,18 @@
-import React, {useState} from 'react';
-import {View, Button, PermissionsAndroid, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Button, PermissionsAndroid, Linking} from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
-import CompanyLogo from '../assests/Logo.png';
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: '#f7f7f7',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 48,
-    paddingVertical: 16,
-  },
-});
+import Share from 'react-native-share';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const HTMLToPDFConverter = ({navigation}) => {
   const [first, setfirst] = useState();
+  useEffect(() => {
+    // ViewPDF();
+    SharePDF();
+    // openPDFViewer();
+  }, [first]);
 
-  const userInfo = {
-    name: 'Sai Prakash',
-    age: '25',
-    height: '125',
-    weight: '52',
-  };
-  // const data={
   const name = '',
     age = 0,
     gender = '',
@@ -49,7 +37,6 @@ const HTMLToPDFConverter = ({navigation}) => {
       THRR: 0,
       vo2max: 0.0,
     };
-  const logo = CompanyLogo;
   const convertToPDF = async () => {
     const htmlContent = `
     <!DOCTYPE html>
@@ -536,10 +523,69 @@ const HTMLToPDFConverter = ({navigation}) => {
       height: 297, // A4 height in points
       width: 210, // A4 width in points
     };
+    ///with rnfetchblob
     try {
       const pdf = await RNHTMLtoPDF.convert(options);
+      const sourcePath = pdf.filePath;
+      //   const createpath = RNFS.DownloadDirectoryPath;
       const path = RNFS.DownloadDirectoryPath + '/' + `${Name}.pdf`; ///custom directory path
-      setfirst(`file://${path}`);
+      const destinationPath = path;
+      moveFile(sourcePath, destinationPath);
+    } catch (error) {
+      console.error('Error moving file:', error);
+    }
+    ////with rnfs
+    // try {
+    //   const pdf = await RNHTMLtoPDF.convert(options);
+    //   const createpath = RNFS.DownloadDirectoryPath;
+    //   const path = RNFS.DownloadDirectoryPath + '/' + `${Name}.pdf`; ///custom directory path
+    //   ///to get permission from android to save file in device
+    //   const granted = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //     {
+    //       title: 'Storage Permission',
+    //       message: 'App needs access to your storage to save the file.',
+    //       buttonNeutral: 'Ask Me Later',
+    //       buttonNegative: 'Cancel',
+    //       buttonPositive: 'OK',
+    //     },
+    //   );
+    //   setfirst(`file://${path}`);
+    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //     // Continue with the copy/move operation of file
+    //     // await RNFS.moveFile(pdf.filePath, path); ///MOVE FILE TO DESIRED LOCATION
+    //     // await RNFS.copyFile(pdf.filePath, path);   ////COPY FILE TO DESIRED LOCATION
+    //     ///if not destination , creates the destinatin  folder and move
+    //     RNFS.exists(createpath)
+    //       .then(directoryExists => {
+    //         if (!directoryExists) {
+    //           // If the directory doesn't exist, create it
+    //           return RNFS.mkdir(createpath);
+    //         }
+    //         // If the directory exists, proceed to move the file
+    //         return Promise.resolve();
+    //       })
+    //       .then(() => {
+    //         // Move the file to the destination directory
+    //         return RNFS.moveFile(pdf.filePath, path);
+    //       })
+    //       .then(success => {
+    //         console.log('File moved successfully:', success);
+    //       })
+    //       .catch(error => {
+    //         console.error('Error:', error);
+    //       });
+    //   } else {
+    //     console.error('Storage permission denied');
+    //   }
+    // } catch (error) {
+    //   console.error('Error generating PDF:', error);
+    // }
+  };
+
+  const moveFile = async (sourcePath, destinationPath) => {
+    const createpath = RNFS.DownloadDirectoryPath;
+    try {
       ///to get permission from android to save file in device
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -551,27 +597,101 @@ const HTMLToPDFConverter = ({navigation}) => {
           buttonPositive: 'OK',
         },
       );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        // Continue with the copy/move operation of file
-        await RNFS.moveFile(pdf.filePath, path); ///MOVE FILE TO DESIRED LOCATION
-        // await RNFS.copyFile(pdf.filePath, path);   ////COPY FILE TO DESIRED LOCATION
-      } else {
-        console.error('Storage permission denied');
+      // Check if the destination directory exists
+      const isDir = await RNFetchBlob.fs.isDir(createpath);
+
+      if (!isDir) {
+        // If the directory doesn't exist, create it
+        await RNFetchBlob.fs.mkdir(createpath);
+      }
+      // Read the file data
+      const fileData = await RNFetchBlob.fs.readFile(sourcePath, 'base64');
+
+      // Write the file data to the destination
+      await RNFetchBlob.fs.writeFile(destinationPath, fileData, 'base64');
+
+      // Remove the original file (optional)
+      await RNFetchBlob.fs.unlink(sourcePath);
+      setfirst(`file://${destinationPath}`);
+      console.log('File moved successfully!');
+    } catch (error) {
+      console.error('Error moving file:', error);
+    }
+  };
+  ///view pdf in device pdf viewer without packges
+  const openPDFViewer = () => {
+    const filePath = first;
+    try {
+      if (filePath) {
+        Linking.openURL(`file://${filePath}`)
+          .then(res => {
+            console.log('file opened successfully');
+          })
+          .catch(error => {
+            console.error('Error opening PDF file: ', error);
+            Alert.alert(
+              'Error',
+              'Could not open PDF file. Please install a PDF viewer.',
+            );
+          });
       }
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error('Error opening PDF:', error);
     }
   };
 
-  const ViewPDF = () => {
+  ///to view pdf in pdf viewer in device 'react-native-share'
+  const ViewPDF = async () => {
+    try {
+      // Get the path to the downloaded PDF file
+      const pdfPath = first;
+      // Check if the file exists
+      const fileExists = await RNFS.exists(pdfPath);
+      if (fileExists) {
+        // Define the options for opening the PDF
+        const options = {
+          type: 'application/pdf',
+          url: `file://${pdfPath}`,
+          showAppsToView: true,
+        };
+        // Open the PDF file with the default PDF viewer
+        await Share.open(options);
+      } else {
+        console.log('PDF file does not exist.');
+      }
+    } catch (error) {
+      console.error('Error opening PDF:', error);
+    }
+  };
+
+  const ViewPDFInScreen = () => {
     navigation.navigate('pdfviewer', {pdfUri: first});
+  };
+  ////to share pdf 'react-native-share'
+  const SharePDF = async () => {
+    try {
+      if (first) {
+        await Share.open({
+          url: `file://${first}`,
+          type: 'application/pdf',
+          title: 'Open PDF',
+        });
+      } else {
+        console.warn('PDF URI is not available');
+      }
+    } catch (error) {
+      console.error('Error opening PDF:', error);
+    }
   };
   return (
     <View>
       {!first && <Button title="Convert to PDF" onPress={convertToPDF} />}
       {first && (
         <>
-          <Button title="view to PDF" onPress={ViewPDF} />
+          <Button title="View PDF in screen" onPress={ViewPDFInScreen} />
+          {/* <Button title="Share PDF" onPress={SharePDF} /> */}
+          {/* <Button title="view PDF" onPress={ViewPDF} /> */}
+          {/* <Button title="Open PDF" onPress={openPDFViewer} /> */}
         </>
       )}
     </View>

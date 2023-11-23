@@ -1,16 +1,20 @@
 import React from 'react';
 import {Button, ImageBackground, StyleSheet, Text, View} from 'react-native';
+import IconDashboard from 'react-native-vector-icons/MaterialIcons';
 
 const Dashboard = ({route, navigation}) => {
-  console.log('route.params', route.params);
-  const {params, userInfo} = route?.params ? route?.params : 'null';
-  console.log('nested paramsuserInfo', userInfo);
-  console.log('params', params);
+  const {params} = route?.params ? route?.params : 'null';
   const image = require('../assests/bg_android.png');
 
   return (
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <IconDashboard
+          name="dashboard"
+          size={50}
+          color="blue"
+          style={{alignSelf: 'center'}}
+        />
         <Text
           style={
             styles.text
