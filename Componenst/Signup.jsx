@@ -109,7 +109,20 @@ const Signup = ({navigation}) => {
           flex: 0.9,
           backgroundColor: 'white',
         }}>
-        <Text
+        <View style={{alignItems: 'center'}}>
+          <Image style={styles.tinyLogo} source={image1} />
+          <Text
+            style={{
+              color: 'black',
+              fontWeight: 'bold',
+              padding: 10,
+              fontSize: 20,
+              marginRight: 'auto',
+            }}>
+            Create Account
+          </Text>
+        </View>
+        {/* <Text
           style={{
             color: 'black',
             fontWeight: 'bold',
@@ -117,7 +130,7 @@ const Signup = ({navigation}) => {
             fontSize: 20,
           }}>
           Create Account <Image style={styles.tinyLogo} source={image1} />
-        </Text>
+        </Text> */}
         <SafeAreaView style={styles.container}>
           <Text style={{color: 'black'}}>Name</Text>
           <TextInput
@@ -183,7 +196,7 @@ const Signup = ({navigation}) => {
                 borderWidth: 5,
                 borderColor: '#fff',
                 height: 50,
-                backgroundColor: '#d3d1cf',
+                backgroundColor: '#81b0ff',
                 width: 200,
                 alignSelf: 'center',
               }}
@@ -201,7 +214,10 @@ const Signup = ({navigation}) => {
           <Text
             style={{alignSelf: 'center', padding: 30}}
             onPress={() => navigation.navigate('login')}>
-            Already Have Account ? Sign In
+            Already Have Account ?{' '}
+            <Text style={{color: '#81b0ff', textDecorationLine: 'underline'}}>
+              Sign In
+            </Text>
           </Text>
         </SafeAreaView>
       </View>
@@ -217,8 +233,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    borderColor: '#f1f4f2',
-    backgroundColor: '#f1f4f2',
+    borderColor: '#81b0ff',
+    backgroundColor: 'white',
   },
   container: {
     marginHorizontal: 16,
@@ -239,8 +255,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   tinyLogo: {
+    padding: 10,
     width: 50,
     height: 50,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

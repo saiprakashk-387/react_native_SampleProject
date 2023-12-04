@@ -9,8 +9,8 @@ const HTMLToPDFConverter = ({navigation}) => {
   const [first, setfirst] = useState();
   useEffect(() => {
     // ViewPDF();
-    SharePDF();
-    // openPDFViewer();
+    // SharePDF();
+    openPDFViewer();
   }, [first]);
 
   const name = '',
@@ -618,7 +618,7 @@ const HTMLToPDFConverter = ({navigation}) => {
       console.error('Error moving file:', error);
     }
   };
-  ///view pdf in device pdf viewer without packges
+  ///view pdf in device pdf viewer without packges list options in screen
   const openPDFViewer = () => {
     const filePath = first;
     try {
@@ -663,7 +663,7 @@ const HTMLToPDFConverter = ({navigation}) => {
       console.error('Error opening PDF:', error);
     }
   };
-
+  ///view pdf in next screen
   const ViewPDFInScreen = () => {
     navigation.navigate('pdfviewer', {pdfUri: first});
   };

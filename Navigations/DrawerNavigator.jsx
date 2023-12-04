@@ -1,13 +1,20 @@
 import React from 'react';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import Login from '../Componenst/Login';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
+import {Alert} from 'react-native';
 import Dashboard from '../Componenst/Dashboard';
 import HTMLToPDFConverter from '../Componenst/HTMLToPDF';
 import PDFViewerComponent from '../Componenst/PDFviewer';
 import IconDashboard from 'react-native-vector-icons/MaterialIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import UsersList from '../Componenst/Users';
 
 const Drawer = createDrawerNavigator();
-const DrawerNavigator = ({route}) => {
+const DrawerNavigator = ({route, navigation}) => {
   const screens = [
     {
       name: 'dashboard',
@@ -34,17 +41,63 @@ const DrawerNavigator = ({route}) => {
       drawerLabelStyle: {fontSize: 12, fontWeight: 'bold'},
       drawerIconStyle: {marginBottom: -12},
     },
+    {
+      name: 'users',
+      title: 'Users list',
+      component: UsersList,
+      icon: 'supervised-user-circle',
+      drawerLabelStyle: {fontSize: 12, fontWeight: 'bold'},
+      drawerIconStyle: {marginBottom: -12},
+    },
   ];
+  const CustomDrawerContent = props => {
+    const handlelogout = async () => {
+      try {
+        const keys = await AsyncStorage.getAllKeys();
+        await AsyncStorage.multiRemove(keys);
+        navigation.navigate('login');
+      } catch (error) {
+        console.error('Error clearing AsyncStorage:', error);
+      }
+    };
+    return (
+      <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+        <DrawerItem
+          label="Logout"
+          icon={() => <IconDashboard name="logout" color={'red'} size={15} />}
+          labelStyle={{fontSize: 12, fontWeight: 'bold'}}
+          onPress={() =>
+            Alert.alert(
+              'Logout',
+              'Are you Sure To Exit',
+              [
+                {
+                  text: 'No',
+                  style: 'cancel',
+                },
+                {
+                  text: 'Yes',
+                  onPress: () => handlelogout(),
+                },
+              ],
+              {cancelable: false},
+            )
+          }
+        />
+      </DrawerContentScrollView>
+    );
+  };
   return (
     <>
       <Drawer.Navigator
         initialRouteName="dash"
         // backBehavior="history"
-      >
+        drawerContent={props => <CustomDrawerContent {...props} />}>
         {screens.map((screen, index) => (
           <Drawer.Screen
             key={index}
-            name={screen.name}
+            name={screen.title}
             component={screen.component}
             options={{
               // title: screen.title,
@@ -58,19 +111,6 @@ const DrawerNavigator = ({route}) => {
             initialParams={screen.initialParams ? screen.initialParams : null}
           />
         ))}
-        <Drawer.Screen
-          name="logout"
-          component={Login}
-          options={{
-            drawerLabel: 'Logout',
-            drawerIcon: ({color, size}) => (
-              <IconDashboard name="logout" color={'red'} size={15} />
-            ),
-            drawerLabelStyle: {fontSize: 12, fontWeight: 'bold'},
-            drawerIconStyle: {marginBottom: -12},
-            headerShown: false,
-          }}
-        />
       </Drawer.Navigator>
     </>
   );

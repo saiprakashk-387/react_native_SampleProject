@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, useRef, useEffect} from 'react';
 import {
   Alert,
@@ -7,7 +8,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableHighlight,
   View,
   Switch,
   Image,
@@ -54,10 +54,11 @@ const Login = ({navigation}) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async () => {
     const password = '15874655';
     const phoneNumber = '852478524';
-    const email = 'sai@yopmai,com';
+    const email = 'sai@yopmai.com';
+    await AsyncStorage.setItem('email', 'sai@yopmai.com');
     navigation.navigate('home', {
       params: {password, phoneNumber, email},
     });
@@ -97,7 +98,7 @@ const Login = ({navigation}) => {
           flex: 0.8,
           backgroundColor: 'white',
         }}>
-        <View>
+        <View style={{alignItems: 'center'}}>
           <Image style={styles.tinyLogo} source={image1} />
           <Text
             style={{
@@ -105,8 +106,9 @@ const Login = ({navigation}) => {
               fontWeight: 'bold',
               padding: 10,
               fontSize: 20,
+              marginRight: 'auto',
             }}>
-            Sign In
+            Welcome, Get Started
           </Text>
         </View>
         <SafeAreaView style={styles.container}>
@@ -137,7 +139,7 @@ const Login = ({navigation}) => {
             name="passsword"
             value={inputValues.password}
             onChangeText={text => handleInputChange('password', text)}
-            placeholder="password"
+            placeholder="Password"
             keyboardType="numeric"
             secureTextEntry
           />
@@ -150,11 +152,24 @@ const Login = ({navigation}) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Switch value={isChecked} onValueChange={handleCheckBoxToggle} />
-            <Text style={{fontSize: 10}}>Remember Me</Text>
-            <Text style={{fontSize: 10, color: 'black'}}>
-              Forget Password ?
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Switch value={isChecked} onValueChange={handleCheckBoxToggle} />
+              <Text style={{fontSize: 10}}>Remember Me</Text>
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: '#81b0ff',
+                  textDecorationLine: 'underline',
+                }}>
+                Forget Password ?
+              </Text>
+            </View>
           </View>
           <View style={{borderRadius: 25}}>
             <TouchableOpacity
@@ -163,14 +178,14 @@ const Login = ({navigation}) => {
                 borderWidth: 5,
                 borderColor: '#fff',
                 height: 50,
-                backgroundColor: '#d3d1cf',
+                backgroundColor: '#81b0ff',
                 width: 200,
                 alignSelf: 'center',
               }}
               onPress={handleFormSubmit}>
               <Text
                 style={{
-                  color: 'black',
+                  color: 'white',
                   padding: 10,
                   alignSelf: 'center',
                 }}>
@@ -181,7 +196,10 @@ const Login = ({navigation}) => {
           <Text
             style={{alignSelf: 'center', padding: 30}}
             onPress={() => navigation.navigate('signup')}>
-            Create a New Account ? SignUp
+            Create a New Account ?{' '}
+            <Text style={{color: '#81b0ff', textDecorationLine: 'underline'}}>
+              SignUp
+            </Text>
           </Text>
         </SafeAreaView>
       </View>
@@ -197,8 +215,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    borderColor: '#f1f4f2',
-    backgroundColor: '#f1f4f2',
+    borderColor: '#81b0ff',
+    backgroundColor: 'white',
   },
   container: {
     marginHorizontal: 16,
